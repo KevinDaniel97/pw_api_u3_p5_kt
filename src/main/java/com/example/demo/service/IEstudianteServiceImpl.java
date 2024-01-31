@@ -30,13 +30,13 @@ public class IEstudianteServiceImpl  implements IEstudianteService{
 	}
 
 	@Override
-	public Estudiante seleccionar(Integer id) {
+	public Estudiante buscar(Integer id) {
 		// TODO Auto-generated method stub
 		return this.estudianteRespository.seleccionar(id);
 	}
 
 	@Override
-	public void eliminar(Integer id) {
+	public void borrar(Integer id) {
 		// TODO Auto-generated method stub
 		this.estudianteRespository.eliminar(id);
 	}
