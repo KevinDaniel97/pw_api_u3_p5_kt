@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,9 +25,6 @@ public class EstudianteControllerRestful {
 	private IEstudianteService estudianteService;
 	
 	
-	
-	
-	
 	@GetMapping(path ="/buscar/{id}")
 	public Estudiante consultar(@PathVariable Integer id) {
 		return this.estudianteService.buscar(id);
@@ -35,9 +33,9 @@ public class EstudianteControllerRestful {
 	
 	
 	//filtar un conjunto de datos RequestParam
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/consultarTodos?genero=M&edad=10&apellido=Toapanta
+	//http://localhost:8080/API/v1.0/Matricula/estudiantes/consultarTodos?genero=M
 	@GetMapping(path="/consultarTodos")
-	public List<Estudiante> consultarTodos(@RequestParam String genero, @RequestParam Integer edad,@RequestParam String apellido){
+	public List<Estudiante> consultarTodos(@RequestParam String genero){
 		return this.estudianteService.buscarTodos(genero);	
 	}
 	
@@ -53,7 +51,7 @@ public class EstudianteControllerRestful {
 	public void actualizar(@RequestBody Estudiante estudiante) {
 		this.estudianteService.actualizar(estudiante);
 	}
-	@PutMapping(path="/actualizarParcial")
+	@PatchMapping(path="/actualizarParcial")
 	public void actualizarParcial(@RequestBody Estudiante estudiante) {
 		this.estudianteService.actualizarParcial(estudiante.getApellido(), estudiante.getNombre(), estudiante.getId());
 	}

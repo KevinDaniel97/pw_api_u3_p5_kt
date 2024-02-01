@@ -48,9 +48,11 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository{
 	}
 	
 	public List<Estudiante> seleccionarTodos(String genero) {
-		TypedQuery<Estudiante> myQuery = this.entityManager.createQuery("SELECT e FROM Estudiante e", Estudiante.class);
+		TypedQuery<Estudiante> myQuery = this.entityManager.createQuery("SELECT e FROM Estudiante e WHERE e.genero = :variable", Estudiante.class);
+		myQuery.setParameter("variable", genero);
         return myQuery.getResultList();
 	}
+	
 	
 	
 }
