@@ -1,10 +1,13 @@
 package com.example.demo.repository;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 import com.example.demo.repository.modelo.Estudiante;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -34,6 +37,7 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository{
 		query.executeUpdate();
 
 	}
+
 	@Override
 	public Estudiante seleccionar(Integer id) {
 		return this.entityManager.find(Estudiante.class, id);
@@ -42,4 +46,11 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository{
 	public void eliminar(Integer id) {
 		this.entityManager.remove(this.seleccionar(id));
 	}
+	
+	public List<Estudiante> seleccionarTodos(String genero) {
+		TypedQuery<Estudiante> myQuery = this.entityManager.createQuery("SELECT e FROM Estudiante e", Estudiante.class);
+        return myQuery.getResultList();
+	}
+	
+	
 }
