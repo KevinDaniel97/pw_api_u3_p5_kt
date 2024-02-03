@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,45 +12,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.repository.modelo.Profesor;
 import com.example.demo.service.IProfesorService;
 
 @RestController
-@RequestMapping(path="profesores")
+@RequestMapping(path="/profesores")
 public class ProfesorControllerRestful {
 
 	@Autowired
 	private IProfesorService profesorService;
 
-	@GetMapping(path ="/buscar/{id}")
+	@GetMapping(path ="{id}")
 	public Profesor consultar(@PathVariable Integer id) {
 		return this.profesorService.buscar(id);
 	}
-	//http://localhost:8080/API/v1.0/Matricula/profesores/buscar
-	
-	
-	//filtar un conjunto de datos RequestParam
-	//http://localhost:8080/API/v1.0/Matricula/profesores/consultarTodos?genero=M
-	@GetMapping(path="/consultarTodos")
-	public List<Profesor> consultarTodos(@RequestParam String genero){
+	@GetMapping
+	public List<Profesor> consultarTodos(@RequestParam(required = false, defaultValue = "M") String genero){
 		return this.profesorService.buscarTodos(genero);	
 	}
 	
-		@PostMapping(path="/guardar")
+	@PostMapping
 	public void guardar(@RequestBody Profesor profesor) {
 		this.profesorService.guardar(profesor);
 	}
 
-	@PutMapping(path="/actualizar")
-	public void actualizar(@RequestBody Profesor profesor) {
+	@PutMapping(path="/{id}")
+	public void actualizar(@RequestBody Profesor profesor, @PathVariable Integer id) {
+		profesor.setId(id);
 		this.profesorService.actualizar(profesor);
 	}
-	@PatchMapping(path="/actualizarParcial")
-	public void actualizarParcial(@RequestBody Profesor profesor) {
+	@PatchMapping(path="/{id}")
+	public void actualizarParcial(@RequestBody Profesor profesor, @PathVariable(name = "id") Integer id) {
 		this.profesorService.actualizarParcial(profesor.getApellido(), profesor.getNombre(), profesor.getId());
 	}
-	@DeleteMapping(path="/borrar/{id}")
+	@DeleteMapping(path="/{id}")
 	public void borrar(@PathVariable Integer id) {
 		this.profesorService.borrar(id);
 	}
