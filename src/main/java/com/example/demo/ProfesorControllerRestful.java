@@ -42,7 +42,7 @@ public class ProfesorControllerRestful {
 		this.profesorService.actualizar(profesor);
 	}
 	@PatchMapping(path="/{id}")
-	public void actualizarParcial(@RequestBody Profesor profesor, @PathVariable(name = "id") Integer id) {
+	public void actualizarParcial(@RequestBody Profesor profesor, @PathVariable Integer id) {
 		this.profesorService.actualizarParcial(profesor.getApellido(), profesor.getNombre(), profesor.getId());
 	}
 	@DeleteMapping(path="/{id}")
