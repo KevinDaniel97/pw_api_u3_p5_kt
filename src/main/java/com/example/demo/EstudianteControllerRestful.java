@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.repository.modelo.Estudiante;
@@ -23,6 +23,9 @@ import com.example.demo.service.IEstudianteService;
 import com.example.demo.service.IMateriaService;
 import com.example.demo.service.to.EstudianteTO;
 import com.example.demo.service.to.MateriaTO;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 @RestController
 @RequestMapping(path="/estudiantes")
@@ -33,14 +36,17 @@ public class EstudianteControllerRestful {
 	@Autowired
 	private IMateriaService iMateriaService;
 
-	@GetMapping(path ="/{id}", produces="application/xml")
-	public ResponseEntity<Estudiante> consultar(@PathVariable Integer id) {
-		//240: grupo satisfactorias  
-		//240: Recurso estudiante encontrado satisfactoriamente
-		Estudiante estu=this.estudianteService.buscar(id);
-		//200 OK
-		//401 Autenticacion
-		//Contrato de la API (1. documento pdf, Swagger.io)
+	@GetMapping(path ="/{id}", produces="application/json")
+	public ResponseEntity<EstudianteTO> consultar(@PathVariable Integer id) {
+		EstudianteTO estu=this.estudianteService.buscarTO(id);
+		
+		Link link = linkTo(methodOn(EstudianteControllerRestful.class).consultarMateriasPorId(estu.getId()))
+				.withRel("materia");
+		Link link2 = linkTo(methodOn(EstudianteControllerRestful.class).consultar(estu.getId()))
+				.withSelfRel();
+		estu.add(link);
+		estu.add(link2);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(estu);
 	}
 	//filtar un conjunto de datos RequestParam
@@ -58,18 +64,21 @@ public class EstudianteControllerRestful {
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<EstudianteTO>> consultarTodosHateoas() {
-		List<EstudianteTO> ls = this.estudianteService.buscarTodosTO();
-		return ResponseEntity.status(HttpStatus.OK).body(ls);
+		List<EstudianteTO> lista = this.estudianteService.buscarTodosTO();
+		for(EstudianteTO est: lista){
+			Link link = linkTo(methodOn(EstudianteControllerRestful.class).consultarMateriasPorId(est.getId())).withRel("materia");
+			est.add(link);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(lista);
 	}
 	
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/1/materias
+	// http://localhost:8080/API/v1.0/Matricula/materias/estudiantes/1/materias GET
 	@GetMapping(path = "/{id}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MateriaTO>> consultarMateriasPorId(@PathVariable Integer id){
 		List<MateriaTO> ls = this.iMateriaService.buscarPorIdEstudiante(id);
 		return ResponseEntity.status(HttpStatus.OK).body(ls);
 	}
-	
-	
 	
 	//metodos capacidades
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

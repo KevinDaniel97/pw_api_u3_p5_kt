@@ -23,6 +23,7 @@ public interface IEstudianteService {
 	
 	public void borrar(Integer id);
 	
-	
+	public EstudianteTO buscarTO(Integer id);
+
 
 }
