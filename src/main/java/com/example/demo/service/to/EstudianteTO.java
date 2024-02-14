@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.hateoas.RepresentationModel;
 
 
+
 public class EstudianteTO extends RepresentationModel<EstudianteTO> implements Serializable {
 	
 	
@@ -15,6 +16,12 @@ public class EstudianteTO extends RepresentationModel<EstudianteTO> implements S
 	private String apellido;
 	private String genero;
 	private LocalDateTime fechaNacimiento;
+	private String direccion;
+	private Integer edad;
+	private String correo;
+	private String facultad;
+	private String carrera;
+	
 	
 	///SET y GET
 	public Integer getId() {
@@ -46,6 +53,39 @@ public class EstudianteTO extends RepresentationModel<EstudianteTO> implements S
 	}
 	public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+	public String getDireccion() {
+		return direccion;
+	}
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+	public Integer getEdad() {
+		return edad;
+	}
+	public void setEdad(Integer edad) {
+		this.edad = edad;
+	}
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	public String getFacultad() {
+		return facultad;
+	}
+	public void setFacultad(String facultad) {
+		this.facultad = facultad;
+	}
+	public String getCarrera() {
+		return carrera;
+	}
+	public void setCarrera(String carrera) {
+		this.carrera = carrera;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

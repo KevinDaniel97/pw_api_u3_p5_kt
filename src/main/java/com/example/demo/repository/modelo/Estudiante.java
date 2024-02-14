@@ -30,12 +30,52 @@ public class Estudiante {
 	private String genero;
 	@Column(name="estu_fecha_nacimiento")
 	private LocalDateTime fechaNacimiento;
-	
-	
+	@Column(name="estu_direccion")
+	private String direccion;
+	@Column(name="estu_edad")
+	private Integer edad;
+	@Column(name="estu_correo")
+	private String correo;
+	@Column(name="estu_facultad")
+	private String facultad;
+	@Column(name="estu_carrera")
+	private String carrera;
+
 	@OneToMany(mappedBy = "estudiante") // un estudiante tiene muchas materias
 	private List<Materia> materias;
 	
-	
+	//get y set
+	public String getDireccion() {
+		return direccion;
+	}
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public Integer getEdad() {
+		return edad;
+	}
+	public void setEdad(Integer edad) {
+		this.edad = edad;
+	}
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	public String getFacultad() {
+		return facultad;
+	}
+	public void setFacultad(String facultad) {
+		this.facultad = facultad;
+	}
+	public String getCarrera() {
+		return carrera;
+	}
+	public void setCarrera(String carrera) {
+		this.carrera = carrera;
+	}
 	public List<Materia> getMaterias() {
 		return materias;
 	}

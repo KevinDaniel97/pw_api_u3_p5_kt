@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.repository.modelo.Estudiante;
 import com.example.demo.service.IEstudianteService;
 import com.example.demo.service.IMateriaService;
+import com.example.demo.service.to.EstudianteLigeroTO;
 import com.example.demo.service.to.EstudianteTO;
 import com.example.demo.service.to.MateriaTO;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -49,9 +50,26 @@ public class EstudianteControllerRestful {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(estu);
 	}
+	@GetMapping(path = "/ligero/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<EstudianteLigeroTO> buscarLigeroTO(@PathVariable Integer id) {
+		EstudianteLigeroTO estuTo = this.estudianteService.buscarLigeroTO(id);
+		Link link = linkTo(methodOn(EstudianteControllerRestful.class).buscarLigeroTO(estuTo.getId()))
+				.withSelfRel();
+		estuTo.add(link);
+		return ResponseEntity.status(HttpStatus.OK).body(estuTo);
+	}
+	
+	@GetMapping(path = "/ligero", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<EstudianteLigeroTO>> consultarTodosHateoasLigero() {
+		List<EstudianteLigeroTO> ls = this.estudianteService.buscarTodosLigeroTO();
+		for (EstudianteLigeroTO est : ls) {
+			Link link = linkTo(methodOn(EstudianteControllerRestful.class).consultarMateriasPorId(est.getId())).withSelfRel();
+			est.add(link);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(ls);
+	}
 	//filtar un conjunto de datos RequestParam
 	//http://localhost:8080/API/v1.0/Matricula/estudiantes/{cedula} GET
-	//http://localhost:8080/API/v1.0/Matricula/estudiantes/GET
 	@GetMapping(path = "/tmp", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Estudiante>> consultarTodos(){
 		List<Estudiante> lista =this.estudianteService.buscarTodos("M");	
