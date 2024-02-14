@@ -36,6 +36,8 @@ public class EstudianteControllerRestful {
 	private IEstudianteService estudianteService;
 	@Autowired
 	private IMateriaService iMateriaService;
+	
+	//------------CRUD---------------
 
 	@GetMapping(path ="/{id}", produces="application/json")
 	public ResponseEntity<EstudianteTO> consultar(@PathVariable Integer id) {
@@ -90,32 +92,38 @@ public class EstudianteControllerRestful {
 		return ResponseEntity.status(HttpStatus.OK).body(lista);
 	}
 	
-	// http://localhost:8080/API/v1.0/Matricula/estudiantes/1/materias
-	// http://localhost:8080/API/v1.0/Matricula/materias/estudiantes/1/materias GET
+
 	@GetMapping(path = "/{id}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MateriaTO>> consultarMateriasPorId(@PathVariable Integer id){
 		List<MateriaTO> ls = this.iMateriaService.buscarPorIdEstudiante(id);
 		return ResponseEntity.status(HttpStatus.OK).body(ls);
 	}
 	
-	//metodos capacidades
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void guardar(@RequestBody Estudiante estudiante) {
+	public  ResponseEntity<String> guardar(@RequestBody Estudiante estudiante) {
 		this.estudianteService.guardar(estudiante);
+		  return ResponseEntity.status(HttpStatus.OK).body("Estudiante guaradado ");
+
 	}
 	//http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
 	@PutMapping(path="/{id}", consumes =MediaType.APPLICATION_JSON_VALUE)
-	public void actualizar(@RequestBody Estudiante estudiante, @PathVariable Integer id) {
+	public  ResponseEntity<String> actualizar(@RequestBody Estudiante estudiante, @PathVariable Integer id) {
 		estudiante.setId(id);
 		this.estudianteService.actualizar(estudiante);
+		  return ResponseEntity.status(HttpStatus.OK).body("Estudiante actualizado ");
+
 	}
 	@PatchMapping(path="/{id}", consumes =MediaType.APPLICATION_JSON_VALUE)
-	public void actualizarParcial(@RequestBody Estudiante estudiante, @PathVariable Integer id) {
+	public ResponseEntity<String> actualizarParcial(@RequestBody Estudiante estudiante, @PathVariable Integer id) {
 		this.estudianteService.actualizarParcial(estudiante.getApellido(), estudiante.getNombre(), estudiante.getId());
+		  return ResponseEntity.status(HttpStatus.OK).body("actualizado parcialmente");
+
 	}
 	@DeleteMapping(path="/{id}")
-	public void borrar(@PathVariable Integer id) {
+	public ResponseEntity<String>  borrar(@PathVariable Integer id) {
 		this.estudianteService.borrar(id);
+		  return ResponseEntity.status(HttpStatus.OK).body("eliminado");
+
 	}
 	
 }
