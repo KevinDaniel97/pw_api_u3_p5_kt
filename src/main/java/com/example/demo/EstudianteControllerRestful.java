@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +31,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(path="/estudiantes")
+@CrossOrigin
+//(value="http://localhost:8080")
 public class EstudianteControllerRestful {
 
 	@Autowired
@@ -100,17 +103,14 @@ public class EstudianteControllerRestful {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public  ResponseEntity<String> guardar(@RequestBody Estudiante estudiante) {
+	public  void guardar(@RequestBody Estudiante estudiante) {
 		this.estudianteService.guardar(estudiante);
-		  return ResponseEntity.status(HttpStatus.OK).body("Estudiante guaradado ");
-
 	}
 	//http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
 	@PutMapping(path="/{id}", consumes =MediaType.APPLICATION_JSON_VALUE)
-	public  ResponseEntity<String> actualizar(@RequestBody Estudiante estudiante, @PathVariable Integer id) {
+	public  void actualizar(@RequestBody Estudiante estudiante, @PathVariable Integer id) {
 		estudiante.setId(id);
 		this.estudianteService.actualizar(estudiante);
-		  return ResponseEntity.status(HttpStatus.OK).body("Estudiante actualizado ");
 
 	}
 	@PatchMapping(path="/{id}", consumes =MediaType.APPLICATION_JSON_VALUE)
